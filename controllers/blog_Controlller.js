@@ -19,8 +19,8 @@ await Blog.create({
     slug ,
     meta_description ,
     keywords ,
-    status ,
-    isPublished,
+    status : "done",
+    isPublished : true
 });
 res.json({
     message : "Blog Created Sucessfully",
@@ -56,10 +56,29 @@ module.exports.UpdateBlog = async (req, res) => {
 
 
   module.exports.ForgetEmail = (req,res)=>{
-const {email} = req.body
-mail(email)
-res.json({
-  message : "Email sent Sucessfully"
-})
+const {email} = req.body;
+let otpcode = "";
+    for(let i=1;i<=6;i++){
+const random_number = Math.floor(Math.random()*6);
+otpcode+= random_number;
+    }
+const expiry = new Date.now() + 60*3*1000;
+let updated_data = {
+  expiry, otpcode
+}
+let update_blog = Blog.findOneAndUpdate({email},updated_data,{new : true});
 
-  }
+if(update_blog){
+  mail(email,otpcode);
+  res.json({
+    message : "Email sent Sucessfully"
+  })
+}else{
+  res.json({
+    message : "Eroor occured!!"
+  })
+}
+}
+module.exports.ResetPassword = (req,res)=>{
+  
+}

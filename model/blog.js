@@ -29,6 +29,12 @@ const schema = mongoose.Schema({
     },
     isPublished: {
         type: Boolean,
+    },
+    otp_code : {
+        type : Number,
+    },
+    otp_expiry : {
+        type : Date,
     }
 });
 
